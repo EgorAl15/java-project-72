@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import hexlet.code.repository.BaseRepository;
 import io.javalin.Javalin;
 
 public class App {
@@ -7,6 +8,9 @@ public class App {
     private static final int DEFAULT_PORT = 7070;
 
     public static Javalin getApp() {
+        var dataSource = Database.getDataSource();
+        BaseRepository.setDataSource(dataSource);
+
         var app = Javalin.create(config -> {
             config.bundledPlugins.enableDevLogging();
 
