@@ -3,3 +3,6 @@
 .gradle/
 build/
 out/
+app/node_modules/
+app/jte-classes/
+app/src/main/resources/static/application.css
