@@ -1,16 +1,25 @@
+@param String flash = null
+
 @template.layout(
-    flash = null,
+    flash = flash,
     content = @`
         <div class="mx-auto max-w-3xl rounded-lg border border-gray-200 bg-gray-50 p-10">
-            <h1 class="text-5xl font-light">Анализатор страниц</h1>
+            <h1 class="text-5xl font-light">
+                Анализатор страниц
+            </h1>
 
             <p class="mt-2 mb-6 text-xl text-gray-600">
                 Бесплатно проверяйте сайты на SEO пригодность
             </p>
 
-            <form action="/urls" method="post" class="flex flex-wrap items-start gap-3">
+            <form action="/urls"
+                  method="post"
+                  class="flex flex-wrap items-start gap-3">
+
                 <div class="grow">
-                    <label for="url-name" class="sr-only">Url для проверки</label>
+                    <label for="url-name" class="sr-only">
+                        Url для проверки
+                    </label>
 
                     <input
                         id="url-name"

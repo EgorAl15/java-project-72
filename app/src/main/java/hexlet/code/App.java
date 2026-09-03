@@ -3,6 +3,7 @@ package hexlet.code;
 import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
 import gg.jte.resolve.ResourceCodeResolver;
+import hexlet.code.controller.UrlsController;
 import hexlet.code.repository.BaseRepository;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
@@ -22,6 +23,11 @@ public class App {
 
     public static Javalin getApp() {
         var dataSource = Database.getDataSource();
+
+        if (System.getenv("JDBC_DATABASE_URL") == null) {
+            Database.init(dataSource);
+        }
+
         BaseRepository.setDataSource(dataSource);
 
         var app = Javalin.create(config -> {
@@ -40,6 +46,10 @@ public class App {
             config.routes.get("/", ctx -> {
                 ctx.render("index.jte");
             });
+
+            config.routes.post("/urls", UrlsController::create);
+            config.routes.get("/urls", UrlsController::index);
+            config.routes.get("/urls/{id}", UrlsController::show);
         });
 
         return app;

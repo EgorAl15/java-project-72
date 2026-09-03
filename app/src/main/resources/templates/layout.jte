@@ -14,9 +14,14 @@
 
 <body>
 <nav class="bg-gray-800">
-    <div class="mx-auto max-w-6xl px-4 py-4">
+    <div class="mx-auto flex max-w-6xl items-center px-4 py-4">
         <a href="/" class="text-xl font-medium text-white">
             Анализатор страниц
+        </a>
+
+        <a href="/urls"
+           class="ml-8 text-gray-300 hover:text-white">
+            Сайты
         </a>
     </div>
 </nav>
