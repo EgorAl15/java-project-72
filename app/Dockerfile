@@ -29,7 +29,7 @@ RUN chmod +x gradlew
 RUN ./gradlew shadowJar --no-daemon
 
 
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
 
