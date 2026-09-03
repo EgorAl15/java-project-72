@@ -9,6 +9,8 @@ import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.rendering.template.JavalinJte;
 
+import javax.sql.DataSource;
+
 public class App {
 
     private static final int DEFAULT_PORT = 7070;
@@ -30,6 +32,10 @@ public class App {
             Database.init(dataSource, "production-schema.sql");
         }
 
+        return getApp(dataSource);
+    }
+
+    public static Javalin getApp(DataSource dataSource) {
         BaseRepository.setDataSource(dataSource);
 
         var app = Javalin.create(config -> {

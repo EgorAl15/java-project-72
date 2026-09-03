@@ -37,6 +37,13 @@ public class Database {
         return new HikariDataSource(config);
     }
 
+    public static DataSource getDataSource(String databaseUrl) {
+        var config = new HikariConfig();
+        config.setJdbcUrl(databaseUrl);
+
+        return new HikariDataSource(config);
+    }
+
     public static void init(DataSource dataSource) {
         init(dataSource, "schema.sql");
     }

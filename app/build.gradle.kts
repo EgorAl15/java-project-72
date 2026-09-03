@@ -1,5 +1,6 @@
 plugins {
     application
+    jacoco
     id("com.gradleup.shadow") version "9.6.1"
 }
 
@@ -23,24 +24,38 @@ dependencies {
 
     implementation("org.slf4j:slf4j-simple:2.0.17")
 
-    // JCB-зависимости оставляем
     implementation("com.zaxxer:HikariCP:6.3.1")
     implementation("com.h2database:h2:2.3.232")
     implementation("org.postgresql:postgresql:42.7.7")
 
-    // тестовые зависимости тоже оставляем
+
     testImplementation(platform("org.junit:junit-bom:6.0.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+
+    testImplementation("io.javalin:javalin-testtools:7.2.3")
+
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.assertj:assertj-core:3.27.3")
 }
 
 tasks.test {
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+
+    reports {
+        xml.required = true
+        html.required = true
+    }
 }
 
 application {
     mainClass = "hexlet.code.App"
 }
+
 tasks.shadowJar {
     duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
     mergeServiceFiles()
