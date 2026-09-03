@@ -16,6 +16,8 @@ public class Database {
 
     public static DataSource getDataSource() {
         var databaseUrl = System.getenv("JDBC_DATABASE_URL");
+        var databaseUsername = System.getenv("JDBC_DATABASE_USERNAME");
+        var databasePassword = System.getenv("JDBC_DATABASE_PASSWORD");
 
         if (databaseUrl == null || databaseUrl.isBlank()) {
             databaseUrl = DEFAULT_DATABASE_URL;
@@ -23,6 +25,14 @@ public class Database {
 
         var config = new HikariConfig();
         config.setJdbcUrl(databaseUrl);
+
+        if (databaseUsername != null && !databaseUsername.isBlank()) {
+            config.setUsername(databaseUsername);
+        }
+
+        if (databasePassword != null && !databasePassword.isBlank()) {
+            config.setPassword(databasePassword);
+        }
 
         return new HikariDataSource(config);
     }
