@@ -38,17 +38,24 @@ public class Database {
     }
 
     public static void init(DataSource dataSource) {
+        init(dataSource, "schema.sql");
+    }
+
+    public static void init(DataSource dataSource, String schemaFile) {
         try (
                 var inputStream = Database.class
                         .getClassLoader()
-                        .getResourceAsStream("schema.sql")
+                        .getResourceAsStream(schemaFile)
         ) {
             if (inputStream == null) {
-                throw new RuntimeException("schema.sql not found");
+                throw new RuntimeException(schemaFile + " not found");
             }
 
             var sql = new BufferedReader(
-                    new InputStreamReader(inputStream, StandardCharsets.UTF_8)
+                    new InputStreamReader(
+                            inputStream,
+                            StandardCharsets.UTF_8
+                    )
             ).lines().collect(Collectors.joining("\n"));
 
             try (
@@ -58,7 +65,10 @@ public class Database {
                 statement.execute(sql);
             }
         } catch (Exception e) {
-            throw new RuntimeException("Failed to initialize database", e);
+            throw new RuntimeException(
+                    "Failed to initialize database",
+                    e
+            );
         }
     }
 }

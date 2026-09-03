@@ -26,6 +26,8 @@ public class App {
 
         if (System.getenv("JDBC_DATABASE_URL") == null) {
             Database.init(dataSource);
+        } else {
+            Database.init(dataSource, "production-schema.sql");
         }
 
         BaseRepository.setDataSource(dataSource);
