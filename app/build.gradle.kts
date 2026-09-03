@@ -42,5 +42,6 @@ application {
     mainClass = "hexlet.code.App"
 }
 tasks.shadowJar {
+    duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
     mergeServiceFiles()
 }
