@@ -41,3 +41,6 @@ tasks.test {
 application {
     mainClass = "hexlet.code.App"
 }
+tasks.shadowJar {
+    mergeServiceFiles()
+}
