@@ -3,25 +3,21 @@
 [![hexlet-check](https://github.com/EgorAl15/java-project-72/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/EgorAl15/java-project-72/actions)
 [![codecov](https://codecov.io/github/EgorAl15/java-project-72/graph/badge.svg?token=QIE8OF96O1)](https://codecov.io/github/EgorAl15/java-project-72)
 
-Создадите полноценное веб-приложение, которое выполняет запросы по сети и сохраняет данные в базу данных. Настроите CI и выполните деплой.
+Веб-приложение для анализа SEO-параметров веб-страниц.
+
+Пользователь может добавить сайт, запустить его проверку и получить основные данные страницы:
+
+- HTTP-код ответа;
+- содержимое тега `<h1>`;
+- содержимое тега `<title>`;
+- значение `<meta name="description">`;
+- дату проверки.
+
+Результаты сохраняются в базе данных и отображаются в истории проверок для каждого сайта.
 
 Учебный проект Хекслета: https://ru.hexlet.io/programs/java
-Как это должно работать: https://files.hexlet.app/a/f9wlja
 
-## Стек
-
-- Java
-
-## Установка
-
-<!-- Опишите установку: клонирование, зависимости, переменные окружения -->
-
-```bash
-git clone https://github.com/EgorAl15/java-project-72.git
-cd java-project-72
-```
-
-## Использование
+Пример работы приложения: https://files.hexlet.app/a/f9wlja
 
 ## Демо
 
@@ -29,15 +25,47 @@ cd java-project-72
 
 https://java-project-72-j66h.onrender.com
 
----
+## Возможности
 
-<details>
-<summary>Автоматические тесты Хекслета</summary>
+- Добавление URL для анализа
+- Нормализация URL перед сохранением
+- Защита от добавления дубликатов
+- Хранение сайтов в базе данных
+- Проверка доступности сайта
+- Получение HTTP-кода ответа
+- SEO-анализ HTML с помощью Jsoup
+- Извлечение `h1`, `title` и `description`
+- Хранение истории проверок
+- Отображение последней проверки в списке сайтов
+- Сокращение длинных SEO-полей до 200 символов
+- Flash-сообщения об успешных и неуспешных операциях
+- Автоматические тесты без реальных сетевых запросов
 
-Тесты запускаются на каждый коммит. За запуск отвечает файл `.github/workflows/hexlet-check.yml` — не удаляйте и не переименовывайте ни его, ни репозиторий.
+## Стек
 
-</details>
+- Java 21
+- Javalin
+- JTE
+- Gradle
+- PostgreSQL
+- H2
+- HikariCP
+- Unirest
+- Jsoup
+- Tailwind CSS
+- JUnit 5
+- AssertJ
+- MockWebServer
+- JaCoCo
+- Codecov
+- GitHub Actions
+- Docker
+- Render
 
-## О Хекслете
+## Установка
 
-[Хекслет](https://ru.hexlet.io/) — школа программирования: авторские программы обучения с практикой, поддержкой наставников и реальными проектами, которые остаются в резюме. Этот репозиторий — один из таких проектов.
+Клонируйте репозиторий:
+
+```bash
+git clone https://github.com/EgorAl15/java-project-72.git
+cd java-project-72/app
