@@ -88,9 +88,12 @@ class AppTest {
         UrlsRepository.save(url);
 
         JavalinTest.test(app, (server, client) -> {
-            var response = client.get("/urls/" + url.getId());
+            var response = client.get(
+                    "/urls/" + url.getId()
+            );
 
             assertThat(response.code()).isEqualTo(200);
+
             assertThat(response.body().string())
                     .contains("https://example.com")
                     .contains("Запустить проверку")
@@ -104,7 +107,9 @@ class AppTest {
                 true,
                 true,
                 HttpClient.newBuilder()
-                        .followRedirects(HttpClient.Redirect.NORMAL)
+                        .followRedirects(
+                                HttpClient.Redirect.NORMAL
+                        )
                         .build()
         );
 
@@ -115,20 +120,26 @@ class AppTest {
             );
 
             assertThat(response.code()).isEqualTo(200);
+
             assertThat(response.body().string())
                     .contains("https://example.com");
 
             var urls = UrlsRepository.getEntities();
 
             assertThat(urls).hasSize(1);
+
             assertThat(urls.getFirst().getName())
                     .isEqualTo("https://example.com");
 
             var id = urls.getFirst().getId();
 
-            var showResponse = client.get("/urls/" + id);
+            var showResponse = client.get(
+                    "/urls/" + id
+            );
 
-            assertThat(showResponse.code()).isEqualTo(200);
+            assertThat(showResponse.code())
+                    .isEqualTo(200);
+
             assertThat(showResponse.body().string())
                     .contains("https://example.com");
         });
@@ -143,7 +154,9 @@ class AppTest {
                 true,
                 true,
                 HttpClient.newBuilder()
-                        .followRedirects(HttpClient.Redirect.NORMAL)
+                        .followRedirects(
+                                HttpClient.Redirect.NORMAL
+                        )
                         .build()
         );
 
@@ -154,18 +167,24 @@ class AppTest {
             );
 
             assertThat(response.code()).isEqualTo(200);
+
             assertThat(response.body().string())
                     .contains("https://example.com");
 
             var urls = UrlsRepository.getEntities();
 
             assertThat(urls).hasSize(1);
+
             assertThat(urls.getFirst().getId())
                     .isEqualTo(url.getId());
 
-            var showResponse = client.get("/urls/" + url.getId());
+            var showResponse = client.get(
+                    "/urls/" + url.getId()
+            );
 
-            assertThat(showResponse.code()).isEqualTo(200);
+            assertThat(showResponse.code())
+                    .isEqualTo(200);
+
             assertThat(showResponse.body().string())
                     .contains("https://example.com");
         });
@@ -180,19 +199,25 @@ class AppTest {
             );
 
             assertThat(response.code()).isEqualTo(422);
+
             assertThat(response.body().string())
                     .contains("Некорректный URL");
 
-            assertThat(UrlsRepository.getEntities()).isEmpty();
+            assertThat(
+                    UrlsRepository.getEntities()
+            ).isEmpty();
         });
     }
 
     @Test
     void testUrlNotFound() {
         JavalinTest.test(app, (server, client) -> {
-            var response = client.get("/urls/999999");
+            var response = client.get(
+                    "/urls/999999"
+            );
 
-            assertThat(response.code()).isEqualTo(404);
+            assertThat(response.code())
+                    .isEqualTo(404);
         });
     }
 
@@ -232,16 +257,22 @@ class AppTest {
 
         JavalinTest.test(app, (server, client) -> {
             var response = client.post(
-                    "/urls/" + url.getId() + "/checks"
+                    "/urls/"
+                            + url.getId()
+                            + "/checks"
             );
 
-            assertThat(response.code()).isEqualTo(302);
+            assertThat(response.code())
+                    .isEqualTo(302);
 
-            var checks = UrlChecksRepository.findByUrlId(
-                    url.getId()
-            );
+            var checks =
+                    UrlChecksRepository
+                            .findByUrlId(
+                                    url.getId()
+                            );
 
-            assertThat(checks).hasSize(1);
+            assertThat(checks)
+                    .hasSize(1);
 
             var check = checks.getFirst();
 
@@ -249,16 +280,24 @@ class AppTest {
                     .isEqualTo(200);
 
             assertThat(check.getTitle())
-                    .isEqualTo("Test page title");
+                    .isEqualTo(
+                            "Test page title"
+                    );
 
             assertThat(check.getH1())
-                    .isEqualTo("Test page h1");
+                    .isEqualTo(
+                            "Test page h1"
+                    );
 
             assertThat(check.getDescription())
-                    .isEqualTo("Test page description");
+                    .isEqualTo(
+                            "Test page description"
+                    );
 
             assertThat(check.getUrlId())
-                    .isEqualTo(url.getId());
+                    .isEqualTo(
+                            url.getId()
+                    );
 
             assertThat(check.getCreatedAt())
                     .isNotNull();
@@ -266,7 +305,9 @@ class AppTest {
     }
 
     @Test
-    void testUrlCheckAppearsOnShowPage() throws Exception {
+    void testUrlCheckAppearsOnShowPage()
+            throws Exception {
+
         var html = """
                 <!doctype html>
                 <html>
@@ -301,7 +342,9 @@ class AppTest {
 
         JavalinTest.test(app, (server, client) -> {
             var checkResponse = client.post(
-                    "/urls/" + url.getId() + "/checks"
+                    "/urls/"
+                            + url.getId()
+                            + "/checks"
             );
 
             assertThat(checkResponse.code())
@@ -311,9 +354,11 @@ class AppTest {
                     "/urls/" + url.getId()
             );
 
-            assertThat(response.code()).isEqualTo(200);
+            assertThat(response.code())
+                    .isEqualTo(200);
 
-            var body = response.body().string();
+            var body =
+                    response.body().string();
 
             assertThat(body)
                     .contains("200")
@@ -324,7 +369,9 @@ class AppTest {
     }
 
     @Test
-    void testUrlCheckAppearsOnUrlsIndex() throws Exception {
+    void testUrlCheckAppearsOnUrlsIndex()
+            throws Exception {
+
         mockWebServer.enqueue(
                 new MockResponse()
                         .setResponseCode(200)
@@ -349,29 +396,42 @@ class AppTest {
 
         JavalinTest.test(app, (server, client) -> {
             var checkResponse = client.post(
-                    "/urls/" + url.getId() + "/checks"
+                    "/urls/"
+                            + url.getId()
+                            + "/checks"
             );
 
             assertThat(checkResponse.code())
                     .isEqualTo(302);
 
-            var response = client.get("/urls");
+            var response =
+                    client.get("/urls");
 
-            assertThat(response.code()).isEqualTo(200);
+            assertThat(response.code())
+                    .isEqualTo(200);
 
-            var body = response.body().string();
+            var body =
+                    response.body().string();
 
             assertThat(body)
                     .contains(url.getName())
                     .contains("200");
 
-            var urls = UrlsRepository.getEntities();
+            var urls =
+                    UrlsRepository.getEntities();
 
-            assertThat(urls).hasSize(1);
-            assertThat(urls.getFirst().getLastCheckStatusCode())
-                    .isEqualTo(200);
-            assertThat(urls.getFirst().getLastCheckCreatedAt())
-                    .isNotNull();
+            assertThat(urls)
+                    .hasSize(1);
+
+            assertThat(
+                    urls.getFirst()
+                            .getLastCheckStatusCode()
+            ).isEqualTo(200);
+
+            assertThat(
+                    urls.getFirst()
+                            .getLastCheckCreatedAt()
+            ).isNotNull();
         });
     }
 
@@ -391,16 +451,22 @@ class AppTest {
 
         JavalinTest.test(app, (server, client) -> {
             var response = client.post(
-                    "/urls/" + url.getId() + "/checks"
+                    "/urls/"
+                            + url.getId()
+                            + "/checks"
             );
 
-            assertThat(response.code()).isEqualTo(302);
+            assertThat(response.code())
+                    .isEqualTo(302);
 
-            var checks = UrlChecksRepository.findByUrlId(
-                    url.getId()
-            );
+            var checks =
+                    UrlChecksRepository
+                            .findByUrlId(
+                                    url.getId()
+                            );
 
-            assertThat(checks).isEmpty();
+            assertThat(checks)
+                    .isEmpty();
         });
     }
 
@@ -411,7 +477,110 @@ class AppTest {
                     "/urls/999999/checks"
             );
 
-            assertThat(response.code()).isEqualTo(404);
+            assertThat(response.code())
+                    .isEqualTo(404);
+        });
+    }
+
+    @Test
+    void testLongSeoFieldsAreTruncated()
+            throws Exception {
+
+        var longText =
+                "a".repeat(250);
+
+        var html = """
+                <!doctype html>
+                <html>
+                    <head>
+                        <title>%s</title>
+                        <meta
+                            name="description"
+                            content="%s"
+                        >
+                    </head>
+                    <body>
+                        <h1>%s</h1>
+                    </body>
+                </html>
+                """.formatted(
+                longText,
+                longText,
+                longText
+        );
+
+        mockWebServer.enqueue(
+                new MockResponse()
+                        .setResponseCode(200)
+                        .setHeader(
+                                "Content-Type",
+                                "text/html; charset=utf-8"
+                        )
+                        .setBody(html)
+        );
+
+        var url = new Url(
+                mockWebServer.url("/").toString()
+        );
+
+        UrlsRepository.save(url);
+
+        JavalinTest.test(app, (server, client) -> {
+            var checkResponse = client.post(
+                    "/urls/"
+                            + url.getId()
+                            + "/checks"
+            );
+
+            assertThat(checkResponse.code())
+                    .isEqualTo(302);
+
+            var checks =
+                    UrlChecksRepository
+                            .findByUrlId(
+                                    url.getId()
+                            );
+
+            assertThat(checks)
+                    .hasSize(1);
+
+            /*
+             * В базе должен оставаться
+             * исходный полный текст.
+             */
+            assertThat(
+                    checks.getFirst().getTitle()
+            ).hasSize(250);
+
+            assertThat(
+                    checks.getFirst().getH1()
+            ).hasSize(250);
+
+            assertThat(
+                    checks.getFirst()
+                            .getDescription()
+            ).hasSize(250);
+
+            var response = client.get(
+                    "/urls/" + url.getId()
+            );
+
+            assertThat(response.code())
+                    .isEqualTo(200);
+
+            var body =
+                    response.body().string();
+
+            var expected =
+                    "a".repeat(200) + "...";
+
+            assertThat(body)
+                    .contains(expected);
+
+            assertThat(body)
+                    .doesNotContain(
+                            "a".repeat(201)
+                    );
         });
     }
 }

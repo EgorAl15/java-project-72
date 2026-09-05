@@ -1,5 +1,6 @@
 @import hexlet.code.model.Url
 @import hexlet.code.model.UrlCheck
+@import hexlet.code.util.TextUtils
 @import java.util.List
 
 @param Url url
@@ -32,7 +33,10 @@
                             Дата создания
                         </td>
                         <td class="px-4 py-3">
-                            ${url.getCreatedAt().toLocalDateTime().toLocalDate().toString()}
+                            ${url.getCreatedAt()
+                                .toLocalDateTime()
+                                .toLocalDate()
+                                .toString()}
                         </td>
                     </tr>
                 </tbody>
@@ -56,8 +60,10 @@
         </h2>
 
         <div class="overflow-x-auto">
-            <table data-test="checks"
-                   class="w-full border-collapse text-left">
+            <table
+                data-test="checks"
+                class="w-full border-collapse text-left"
+            >
                 <thead>
                     <tr class="border-b">
                         <th class="px-4 py-3">ID</th>
@@ -81,19 +87,22 @@
                             </td>
 
                             <td class="px-4 py-3">
-                                ${check.getH1()}
+                                ${TextUtils.truncate(check.getH1())}
                             </td>
 
                             <td class="px-4 py-3">
-                                ${check.getTitle()}
+                                ${TextUtils.truncate(check.getTitle())}
                             </td>
 
                             <td class="px-4 py-3">
-                                ${check.getDescription()}
+                                ${TextUtils.truncate(check.getDescription())}
                             </td>
 
                             <td class="px-4 py-3">
-                                ${check.getCreatedAt().toLocalDateTime().toLocalDate().toString()}
+                                ${check.getCreatedAt()
+                                    .toLocalDateTime()
+                                    .toLocalDate()
+                                    .toString()}
                             </td>
                         </tr>
                     @endfor
