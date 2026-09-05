@@ -3,6 +3,7 @@ package hexlet.code;
 import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
 import gg.jte.resolve.ResourceCodeResolver;
+import hexlet.code.controller.UrlChecksController;
 import hexlet.code.controller.UrlsController;
 import hexlet.code.repository.BaseRepository;
 import io.javalin.Javalin;
@@ -17,10 +18,17 @@ public class App {
 
     private static TemplateEngine createTemplateEngine() {
         ClassLoader classLoader = App.class.getClassLoader();
-        ResourceCodeResolver codeResolver =
-                new ResourceCodeResolver("templates", classLoader);
 
-        return TemplateEngine.create(codeResolver, ContentType.Html);
+        ResourceCodeResolver codeResolver =
+                new ResourceCodeResolver(
+                        "templates",
+                        classLoader
+                );
+
+        return TemplateEngine.create(
+                codeResolver,
+                ContentType.Html
+        );
     }
 
     public static Javalin getApp() {
@@ -29,7 +37,10 @@ public class App {
         if (System.getenv("JDBC_DATABASE_URL") == null) {
             Database.init(dataSource);
         } else {
-            Database.init(dataSource, "production-schema.sql");
+            Database.init(
+                    dataSource,
+                    "production-schema.sql"
+            );
         }
 
         return getApp(dataSource);
@@ -42,7 +53,9 @@ public class App {
             config.bundledPlugins.enableDevLogging();
 
             config.fileRenderer(
-                    new JavalinJte(createTemplateEngine())
+                    new JavalinJte(
+                            createTemplateEngine()
+                    )
             );
 
             config.staticFiles.add(staticFiles -> {
@@ -55,9 +68,25 @@ public class App {
                 ctx.render("index.jte");
             });
 
-            config.routes.post("/urls", UrlsController::create);
-            config.routes.get("/urls", UrlsController::index);
-            config.routes.get("/urls/{id}", UrlsController::show);
+            config.routes.post(
+                    "/urls",
+                    UrlsController::create
+            );
+
+            config.routes.get(
+                    "/urls",
+                    UrlsController::index
+            );
+
+            config.routes.get(
+                    "/urls/{id}",
+                    UrlsController::show
+            );
+
+            config.routes.post(
+                    "/urls/{id}/checks",
+                    UrlChecksController::create
+            );
         });
 
         return app;
@@ -69,7 +98,9 @@ public class App {
         var port = System.getenv("PORT");
 
         if (port != null) {
-            app.start(Integer.parseInt(port));
+            app.start(
+                    Integer.parseInt(port)
+            );
         } else {
             app.start(DEFAULT_PORT);
         }

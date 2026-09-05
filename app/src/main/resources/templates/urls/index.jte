@@ -18,7 +18,8 @@
                     <tr class="border-b">
                         <th class="px-4 py-3">ID</th>
                         <th class="px-4 py-3">Имя</th>
-                        <th class="px-4 py-3">Дата создания</th>
+                        <th class="px-4 py-3">Последняя проверка</th>
+                        <th class="px-4 py-3">Код ответа</th>
                     </tr>
                 </thead>
 
@@ -37,7 +38,18 @@
                             </td>
 
                             <td class="px-4 py-3">
-                                ${url.getCreatedAt().toLocalDateTime().toLocalDate().toString()}
+                                @if(url.getLastCheckCreatedAt() != null)
+                                    ${url.getLastCheckCreatedAt()
+                                        .toLocalDateTime()
+                                        .toLocalDate()
+                                        .toString()}
+                                @endif
+                            </td>
+
+                            <td class="px-4 py-3">
+                                @if(url.getLastCheckStatusCode() != null)
+                                    ${url.getLastCheckStatusCode()}
+                                @endif
                             </td>
                         </tr>
                     @endfor

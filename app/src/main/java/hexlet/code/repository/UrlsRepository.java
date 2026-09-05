@@ -60,7 +60,9 @@ public class UrlsRepository extends BaseRepository {
         }
     }
 
-    public static Optional<Url> findByName(String name) throws SQLException {
+    public static Optional<Url> findByName(String name)
+            throws SQLException {
+
         var sql = """
                 SELECT id, name, created_at
                 FROM urls
@@ -87,9 +89,29 @@ public class UrlsRepository extends BaseRepository {
         var urls = new ArrayList<Url>();
 
         var sql = """
-                SELECT id, name, created_at
-                FROM urls
-                ORDER BY created_at DESC
+                SELECT
+                    u.id,
+                    u.name,
+                    u.created_at,
+
+                    (
+                        SELECT uc.status_code
+                        FROM url_checks uc
+                        WHERE uc.url_id = u.id
+                        ORDER BY uc.created_at DESC, uc.id DESC
+                        LIMIT 1
+                    ) AS last_status_code,
+
+                    (
+                        SELECT uc.created_at
+                        FROM url_checks uc
+                        WHERE uc.url_id = u.id
+                        ORDER BY uc.created_at DESC, uc.id DESC
+                        LIMIT 1
+                    ) AS last_check_created_at
+
+                FROM urls u
+                ORDER BY u.created_at DESC, u.id DESC
                 """;
 
         try (
@@ -98,18 +120,41 @@ public class UrlsRepository extends BaseRepository {
                 var resultSet = statement.executeQuery()
         ) {
             while (resultSet.next()) {
-                urls.add(buildUrl(resultSet));
+                urls.add(buildUrlWithLastCheck(resultSet));
             }
         }
 
         return urls;
     }
 
-    private static Url buildUrl(ResultSet resultSet) throws SQLException {
+    private static Url buildUrl(ResultSet resultSet)
+            throws SQLException {
+
         return new Url(
                 resultSet.getLong("id"),
                 resultSet.getString("name"),
                 resultSet.getTimestamp("created_at")
+        );
+    }
+
+    private static Url buildUrlWithLastCheck(ResultSet resultSet)
+            throws SQLException {
+
+        var statusCode = resultSet.getObject(
+                "last_status_code",
+                Integer.class
+        );
+
+        var lastCheckCreatedAt = resultSet.getTimestamp(
+                "last_check_created_at"
+        );
+
+        return new Url(
+                resultSet.getLong("id"),
+                resultSet.getString("name"),
+                resultSet.getTimestamp("created_at"),
+                statusCode,
+                lastCheckCreatedAt
         );
     }
 }

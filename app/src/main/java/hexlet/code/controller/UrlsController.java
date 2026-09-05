@@ -1,6 +1,7 @@
 package hexlet.code.controller;
 
 import hexlet.code.model.Url;
+import hexlet.code.repository.UrlChecksRepository;
 import hexlet.code.repository.UrlsRepository;
 import io.javalin.http.Context;
 
@@ -29,11 +30,14 @@ public class UrlsController {
             return;
         }
 
+        var checks = UrlChecksRepository.findByUrlId(id);
+
         String flash = ctx.sessionAttribute("flash");
         ctx.req().getSession().removeAttribute("flash");
 
         var page = new HashMap<String, Object>();
         page.put("url", url.get());
+        page.put("checks", checks);
 
         if (flash != null) {
             page.put("flash", flash);
@@ -72,6 +76,7 @@ public class UrlsController {
         }
 
         var url = new Url(normalizedUrl);
+
         UrlsRepository.save(url);
 
         ctx.sessionAttribute(
@@ -93,8 +98,10 @@ public class UrlsController {
         var host = url.getHost();
         var port = url.getPort();
 
-        if (protocol == null || protocol.isBlank()
-                || host == null || host.isBlank()) {
+        if (protocol == null
+                || protocol.isBlank()
+                || host == null
+                || host.isBlank()) {
             throw new IllegalArgumentException("Invalid URL");
         }
 

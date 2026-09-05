@@ -3,9 +3,13 @@ package hexlet.code.model;
 import java.sql.Timestamp;
 
 public class Url {
+
     private Long id;
     private String name;
     private Timestamp createdAt;
+
+    private Integer lastCheckStatusCode;
+    private Timestamp lastCheckCreatedAt;
 
     public Url(String name) {
         this.name = name;
@@ -16,6 +20,20 @@ public class Url {
         this.id = id;
         this.name = name;
         this.createdAt = createdAt;
+    }
+
+    public Url(
+            Long id,
+            String name,
+            Timestamp createdAt,
+            Integer lastCheckStatusCode,
+            Timestamp lastCheckCreatedAt
+    ) {
+        this.id = id;
+        this.name = name;
+        this.createdAt = createdAt;
+        this.lastCheckStatusCode = lastCheckStatusCode;
+        this.lastCheckCreatedAt = lastCheckCreatedAt;
     }
 
     public Long getId() {
@@ -40,5 +58,21 @@ public class Url {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Integer getLastCheckStatusCode() {
+        return lastCheckStatusCode;
+    }
+
+    public void setLastCheckStatusCode(Integer lastCheckStatusCode) {
+        this.lastCheckStatusCode = lastCheckStatusCode;
+    }
+
+    public Timestamp getLastCheckCreatedAt() {
+        return lastCheckCreatedAt;
+    }
+
+    public void setLastCheckCreatedAt(Timestamp lastCheckCreatedAt) {
+        this.lastCheckCreatedAt = lastCheckCreatedAt;
     }
 }
